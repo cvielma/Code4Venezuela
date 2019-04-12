@@ -29,8 +29,8 @@ ext.versions = [
 ]
 
 dependencies {
-    compile "org.apache.flink:flink-streaming-java_2.11:${versions.flink}"
-    compile "org.apache.flink:flink-statebackend-rocksdb_2.11:${versions.flink}"
+    compileOnly "org.apache.flink:flink-streaming-java_2.11:${versions.flink}"
+    compileOnly "org.apache.flink:flink-statebackend-rocksdb_2.11:${versions.flink}"
     compile "org.apache.flink:flink-connector-twitter_2.11:${versions.flink}"
 
     compile "commons-logging:commons-logging:1.2"
@@ -38,6 +38,8 @@ dependencies {
 
 shadowJar {
     zip64 = true
+
+    exclude 'org/apache/flink/shaded/com/**'
 }
 
 task wrapper(type: Wrapper) {
