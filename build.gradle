@@ -1,0 +1,46 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.+"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'org.codeforvenezuela'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+
+
+ext.versions = [
+    flink : '1.7.+'
+]
+
+dependencies {
+    compile "org.apache.flink:flink-streaming-java_2.11:${versions.flink}"
+    compile "org.apache.flink:flink-statebackend-rocksdb_2.11:${versions.flink}"
+    compile "org.apache.flink:flink-connector-twitter_2.11:${versions.flink}"
+
+    compile "commons-logging:commons-logging:1.2"
+}
+
+shadowJar {
+    zip64 = true
+}
+
+task wrapper(type: Wrapper) {
+    distributionType = 'all'
+    gradleVersion = '4.10.2'
+}
