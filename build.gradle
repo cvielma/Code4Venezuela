@@ -45,6 +45,7 @@ dependencies {
     compileOnly "org.apache.flink:flink-statebackend-rocksdb_2.11:${versions.flink}"
     compile "org.apache.flink:flink-connector-twitter_2.11:${versions.flink}"
     compile "org.apache.flink:flink-jdbc:1.6.4"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
     runtime "postgresql:postgresql:9.0-801.jdbc4"
 
