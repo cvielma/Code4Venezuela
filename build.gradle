@@ -1,14 +1,37 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.+"
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
-group 'code4venezuela'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'org.codeforvenezuela'
 version '1.0-SNAPSHOT'
+
 applicationDefaultJvmArgs = ["-Xmx4096m"]
+
 sourceCompatibility = 1.8
+
 mainClassName = 'HelloWorldNLP'
+
+
 repositories {
     mavenCentral()
 }
+
+ext.versions = [
+        flink : '1.7.+'
+]
+
 dependencies {
     compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.9.2'
     compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', classifier: 'models', version: '3.9.2'
@@ -18,9 +41,26 @@ dependencies {
     compile 'com.github.scribejava:scribejava-apis:6.4.1'
     compile 'org.json:json:20171018'
 
+    compileOnly "org.apache.flink:flink-streaming-java_2.11:${versions.flink}"
+    compileOnly "org.apache.flink:flink-statebackend-rocksdb_2.11:${versions.flink}"
+    compile "org.apache.flink:flink-connector-twitter_2.11:${versions.flink}"
+    compile "org.apache.flink:flink-jdbc:1.6.4"
+
+    runtime "postgresql:postgresql:9.0-801.jdbc4"
+
+    compile "commons-logging:commons-logging:1.2"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
 }
+
+shadowJar {
+    zip64 = true
+
+    exclude 'org/apache/flink/shaded/com/**'
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '4.10'
 }
