@@ -4,4 +4,4 @@
 .gradle
 gradle
 data/
-**/tweets.json
+src/main/resources/tweets.json
