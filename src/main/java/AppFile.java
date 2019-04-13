@@ -15,7 +15,8 @@ public class AppFile {
 
         DataStream<String> streamSource = env.readTextFile(url.getPath());
 
-        streamSource.print();
+        Pipeline.process(streamSource);
+
         env.execute();
     }
 

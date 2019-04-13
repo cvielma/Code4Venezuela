@@ -13,14 +13,13 @@ import java.util.Collections;
 /**
  * Usage [--twitter-source.consumerKey <key> --twitter-source.consumerSecret <secret> --twitter-source.token <token> --twitter-source.tokenSecret <tokenSecret>]
  */
-public class App {
+public class AppStream {
 
     public static void main(String[] args) throws Exception {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
 
         DataStream<String> streamSource = null;
         if (params.has(TwitterSource.CONSUMER_KEY) &&
@@ -34,7 +33,8 @@ public class App {
             System.out.println("missing params");
         }
 
-        streamSource.print();
+        Pipeline.process(streamSource);
+
         env.execute();
     }
 
@@ -43,7 +43,7 @@ public class App {
         @Override
         public StreamingEndpoint createEndpoint() {
             StatusesFilterEndpoint streamingEndpoint = new StatusesFilterEndpoint();
-            streamingEndpoint.trackTerms(Collections.singletonList("#cars"));
+            streamingEndpoint.trackTerms(Collections.singletonList("#ServicioPublico"));
             return streamingEndpoint;
         }}
 
