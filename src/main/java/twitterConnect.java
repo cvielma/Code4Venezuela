@@ -74,7 +74,6 @@ public class twitterConnect {
 
         final Response response = service.execute(request);
         String json = response.getBody();
-        System.out.println(json);
 
         JSONObject obj = new JSONObject(json);
 
@@ -85,8 +84,11 @@ public class twitterConnect {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
-        writer.append(arr.toString(2));
-        writer.append("\n");
+        for (int i = 0; i < arr.length(); i++) {
+            String status = arr.getJSONObject(i).toString();
+            writer.append(status);
+            writer.append("\n");
+        }
 
         writer.close();
 
