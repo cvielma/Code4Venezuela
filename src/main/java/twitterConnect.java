@@ -81,16 +81,12 @@ public class twitterConnect {
         JSONArray arr = obj.getJSONArray("statuses");
 
 
-        File file = main.getFileFromResources("tweets.txt");
+        File file = main.getFileFromResources("tweets.json");
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
-        for (int i = 0; i < arr.length(); i++) {
-            String status = arr.getJSONObject(i).toString();
-            writer.append(status);
-            writer.append("\n");
-            System.out.println(status);
-        }
+        writer.append(arr.toString(2));
+        writer.append("\n");
 
         writer.close();
 
