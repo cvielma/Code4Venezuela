@@ -10,6 +10,7 @@ public enum ServicioPublicoNerTag {
     MED("MED"),
     LOC("LOC"),
     CONTACT("CONTACT"),
+    NAME("NAME"),
     BNAME("B-NAME"),
     INAME("I-NAME");
 

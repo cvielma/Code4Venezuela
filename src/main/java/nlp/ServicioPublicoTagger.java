@@ -7,6 +7,8 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
 
@@ -49,11 +51,11 @@ public class ServicioPublicoTagger {
                 String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
                 ServicioPublicoNerTag.getTag(ne).ifPresent(
                         t -> {
-                            if (nerTags.containsKey(t)) {
-                                nerTags.get(t).add(word);
-                            } else {
-                                nerTags.put(t, new HashSet<>(singletonList(word)));
-                            }
+                            nerTags.merge(t, new HashSet<>(singletonList(word)), (s1, s2) ->
+                                    Stream.of(s1, s2)
+                                            .flatMap(Collection::stream)
+                                            .collect(Collectors.toSet())
+                            );
                         });
             }
         }
