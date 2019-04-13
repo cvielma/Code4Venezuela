@@ -10,12 +10,12 @@ import java.util.Set;
 public class TweetDto {
     String originalTweet;
     String tweetText;
-    Map<ServicioPublicoNerTag, Set<String>> tags;
+    TagsDto tags;
 
     public TweetDto() {
     }
 
-    public TweetDto(String originalTweet, String tweetText, Map<ServicioPublicoNerTag, Set<String>> tags) {
+    public TweetDto(String originalTweet, String tweetText, TagsDto tags) {
         this.originalTweet = originalTweet;
         this.tweetText = tweetText;
         this.tags = tags;
@@ -37,11 +37,11 @@ public class TweetDto {
         this.tweetText = tweetText;
     }
 
-    public Map<ServicioPublicoNerTag, Set<String>> getTags() {
+    public TagsDto getTags() {
         return tags;
     }
 
-    public void setTags(Map<ServicioPublicoNerTag, Set<String>> tags) {
+    public void setTags(TagsDto tags) {
         this.tags = tags;
     }
 

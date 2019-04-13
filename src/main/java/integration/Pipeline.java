@@ -3,6 +3,7 @@ package integration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.TagsDto;
 import dto.TweetDto;
 import nlp.ServicioPublicoTagger;
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -77,9 +78,9 @@ public class Pipeline {
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
             String text = jsonNode.get("text").asText();
             TweetDto dto = new TweetDto();
-            dto.setOriginalTweet(value);
+//            dto.setOriginalTweet(value);
             dto.setTweetText(text);
-            dto.setTags(tagger.getTagsFor(text));
+            dto.setTags(new TagsDto(tagger.getTagsFor(text)));
             out.collect(dto);
         }
     }
