@@ -1,53 +1,34 @@
 package flink;
 
-import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
-import com.twitter.hbc.core.endpoint.StreamingEndpoint;
-import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.connectors.twitter.TwitterSource;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 
-import java.io.Serializable;
-import java.util.Collections;
+import java.util.Properties;
 
 /**
- * Executes the Flink pipeline using the Twitter stream API.
- *
- * Usage [--twitter-source.consumerKey <key> --twitter-source.consumerSecret <secret> --twitter-source.token <token> --twitter-source.tokenSecret <tokenSecret>]
+ * Executes the Flink pipeline with a Kafka source.
+ * @see twitter.TwitterConnectUtil for Kafka input.
  */
 public class AppStream {
 
     public static void main(String[] args) throws Exception {
 
-        final ParameterTool params = ParameterTool.fromArgs(args);
-
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStream<String> streamSource = null;
-        if (params.has(TwitterSource.CONSUMER_KEY) &&
-                params.has(TwitterSource.CONSUMER_SECRET) &&
-                params.has(TwitterSource.TOKEN) &&
-                params.has(TwitterSource.TOKEN_SECRET)) {
-            final TwitterSource twitterSource = new TwitterSource(params.getProperties());
-            twitterSource.setCustomEndpointInitializer(new CustomEndPoint());
-            streamSource = env.addSource(twitterSource);
-        } else {
-            System.out.println("missing params");
-        }
+        Properties properties = new Properties();
+
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "streamapp");
+
+        DataStream<String> streamSource = env
+                .addSource(new FlinkKafkaConsumer<>("test-topic", new SimpleStringSchema(), properties));
 
         Pipeline.process(streamSource);
 
         env.execute();
     }
-
-
-    public static class CustomEndPoint implements TwitterSource.EndpointInitializer, Serializable {
-        @Override
-        public StreamingEndpoint createEndpoint() {
-            StatusesFilterEndpoint streamingEndpoint = new StatusesFilterEndpoint();
-            streamingEndpoint.trackTerms(Collections.singletonList("#ServicioPublico"));
-            return streamingEndpoint;
-        }}
-
 }
 

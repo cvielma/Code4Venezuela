@@ -5,3 +5,4 @@
 gradle
 data/
 src/main/resources/tweets.json
+out/production/**
