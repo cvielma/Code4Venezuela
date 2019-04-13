@@ -25,7 +25,7 @@ public class AppKafka {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "streamapp");
 
         DataStream<String> streamSource = env
-                .addSource(new FlinkKafkaConsumer<>("test-topic", new SimpleStringSchema(), properties));
+                .addSource(new FlinkKafkaConsumer<>("source-topic", new SimpleStringSchema(), properties));
 
         Pipeline.process(streamSource);
 

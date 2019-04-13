@@ -3,12 +3,15 @@ package flink;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import dto.TagsDto;
 import dto.TweetDto;
 import nlp.ServicioPublicoTagger;
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.io.jdbc.JDBCOutputFormat;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
 
@@ -16,16 +19,7 @@ import java.sql.Types;
 
 public class Pipeline {
 
-
-    private static final JDBCOutputFormat JDBC_OUTPUT_FORMAT = JDBCOutputFormat.buildJDBCOutputFormat()
-            .setDrivername("org.postgresql.Driver")
-            //Docker conf
-            //.setDBUrl("jdbc:postgresql://127.0.0.1:5432/postgres")
-            .setDBUrl("jdbc:postgresql://127.0.0.1:5432/postgres")
-            .setQuery("INSERT INTO public.tweets VALUES (?)")
-            .setSqlTypes(new int[] {Types.VARCHAR})
-            .setBatchInterval(2)
-            .finish();
+    private static final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     public static void process(DataStream<String> streamSource) {
 
@@ -34,25 +28,19 @@ public class Pipeline {
 
         filteredStream.print();
 
-        //outPutToDB(filteredStream); -> to store in db
+        filteredStream.map(dto -> ow.writeValueAsString(dto)).addSink(createProducer());
+    }
+
+    private static FlinkKafkaProducer<String> createProducer() {
+        return new FlinkKafkaProducer<>(
+                "127.0.0.1:9092",
+                "sink-topic",
+                new SimpleStringSchema());
     }
 
     private static DataStream<String> filter(DataStream<String> streamSource) {
         return streamSource.filter(string -> !string.isEmpty())
                 .filter(string -> !string.matches("[0-9]>"));
-    }
-
-    private static void outPutToDB(DataStream<TweetDto> tweetStream) {
-        DataStream<Row> rows = tweetStream
-                .map(dto ->{
-                    Row row = new Row(1);
-                    row.setField(1, dto.getTweetText());
-                    return row;
-                });
-
-        rows.writeUsingOutputFormat(JDBC_OUTPUT_FORMAT);
-
-        rows.print();
     }
 
     // This could be probably more efficient
@@ -66,9 +54,6 @@ public class Pipeline {
             this.tagger = tagger;
         }
 
-        /**
-         * Select the language from the incoming JSON text
-         */
         @Override
         public void flatMap(String value, Collector<TweetDto> out) throws Exception {
             if(jsonParser == null) {
@@ -81,7 +66,7 @@ public class Pipeline {
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
             String text = jsonNode.get("text").asText();
             TweetDto dto = new TweetDto();
-//            dto.setOriginalTweet(value);
+            dto.setOriginalTweet(value);
             dto.setTweetText(text);
             dto.setTags(new TagsDto(tagger.getTagsFor(text)));
             out.collect(dto);

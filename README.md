@@ -30,7 +30,7 @@ The project includes more things, and we might expand it in the future to includ
 storing geolocalization data, and more things that could help AI and data mining.
 
 # How to run?
-1. docker-compuse up (needed to have local Kafka running) .
+1. docker-compose up (needed to have local Kafka running) .
 2. Start AppKafka.java (just run the class which has a main method).
 3. Once AppKafka is started, run TwitterConnectUtil (once again run main method) to feed the stream.
 

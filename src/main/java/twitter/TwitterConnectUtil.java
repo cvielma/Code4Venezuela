@@ -52,7 +52,7 @@ public class TwitterConnectUtil {
         for (int i = 0; i < arr.length(); i++) {
             String status = arr.getJSONObject(i).toString();
             System.out.println(status);
-            producer.send(new ProducerRecord<>("test-topic", Long.valueOf(i), status));
+            producer.send(new ProducerRecord<>("source-topic", Long.valueOf(i), status));
         }
     }
 
