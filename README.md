@@ -35,8 +35,7 @@ tagged.
 
 # License
 CoreNLP is distributed under GPL so we are obliged to do so as well. If you don't use any of the CoreNLP then you can consider the
-rest of the code MIT licensed (unless we have missed any other restrictions on the licenses of the project, keeping in mind
-we did it without much previous knowledge on Twitter APIs, NLP or even Flink and during a Hackathon). 
+rest of the code MIT licensed (unless we have missed any other restrictions on dependant libraries). 
 
 # The Team
 - Christian Vielma
