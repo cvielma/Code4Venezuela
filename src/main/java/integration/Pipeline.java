@@ -19,8 +19,10 @@ public class Pipeline {
 
     private static final JDBCOutputFormat JDBC_OUTPUT_FORMAT = JDBCOutputFormat.buildJDBCOutputFormat()
             .setDrivername("org.postgresql.Driver")
-            .setDBUrl("jdbc:postgresql://db:5432/postgres")
-            .setQuery("INSERT INTO public.test VALUES (?)")
+            //Docker conf
+            //.setDBUrl("jdbc:postgresql://127.0.0.1:5432/postgres")
+            .setDBUrl("jdbc:postgresql://127.0.0.1:5432/postgres")
+            .setQuery("INSERT INTO public.tweets VALUES (?)")
             .setSqlTypes(new int[] {Types.VARCHAR})
             .setBatchInterval(2)
             .finish();
@@ -40,11 +42,11 @@ public class Pipeline {
                 .filter(string -> !string.matches("[0-9]>"));
     }
 
-    private static void outPutToDB(DataStream<String> streamSource) {
-        DataStream<Row> rows = streamSource
-                .map(string ->{
+    private static void outPutToDB(DataStream<TweetDto> tweetStream) {
+        DataStream<Row> rows = tweetStream
+                .map(dto ->{
                     Row row = new Row(1);
-                    row.setField(0, string);
+                    row.setField(1, dto.getTweetText());
                     return row;
                 });
 
