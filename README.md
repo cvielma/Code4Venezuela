@@ -43,3 +43,6 @@ rest of the code MIT licensed (unless we have missed any other restrictions on d
 - Marcos Grillo
 - Karina Celis
 
+# Helpful Links
+- http://data.cervantesvirtual.com/blog/2017/07/17/libreria-corenlp-de-stanford-de-procesamiento-lenguage-natural-reconocimiento-entidades/
+- https://stanfordnlp.github.io/CoreNLP/api.html
