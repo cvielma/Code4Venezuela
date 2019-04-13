@@ -77,7 +77,7 @@ public class Pipeline {
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
             String text = jsonNode.get("text").asText();
             TweetDto dto = new TweetDto();
-//            dto.setOriginalTweet(value);
+            dto.setOriginalTweet(value);
             dto.setTweetText(text);
             dto.setTags(tagger.getTagsFor(text));
             out.collect(dto);
