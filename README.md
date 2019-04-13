@@ -39,8 +39,8 @@ rest of the code MIT licensed (unless we have missed any other restrictions on t
 we did it without much previous knowledge on Twitter APIs, NLP or even Flink and during a Hackathon). 
 
 # The Team
-Christian Vielma
-Manuel Salgado
-Marcos Grillo
-Karina Celis
+- Christian Vielma
+- Manuel Salgado
+- Marcos Grillo
+- Karina Celis
 
