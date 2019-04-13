@@ -12,7 +12,7 @@ This code has different parts:
 
 We provide 2 ways to get data from Twitter pending approval for Premium API access. 
 One is in a polling way using current free apis, and the other via the Flink connector. Since the main solution is based on Flink, 
-what we do is to use the first (poll) to export to a file which is then used for Flink (AppFile.java), the other (streaming) uses Flink's Twitter
+what we do is to use the first (poll) and publish to Kafka which is then consumed by Flink (AppKafka.java), the other (streaming) uses Flink's Twitter
 Connector (AppStream). Both use the same Flink Pipeline (Pipeline.java)
 
 We have trained a simple model (in the resources/train_data folder) in Spanish, using existing tweets from the initial data set in the project, 
@@ -30,7 +30,11 @@ The project includes more things, and we might expand it in the future to includ
 storing geolocalization data, and more things that could help AI and data mining.
 
 # How to run?
-The easiest way is to run the AppFile.java class. You can uncomment the output via console line to see how the ingested tweets are
+1. docker-compuse up (needed to have local Kafka running) .
+2. Start AppKafka.java (just run the class which has a main method).
+3. Once AppKafka is started, run TwitterConnectUtil (once again run main method) to feed the stream.
+
+You can uncomment the output via console line to see how the ingested tweets are
 tagged.
 
 # License

@@ -45,6 +45,7 @@ dependencies {
     compile 'org.apache.kafka:kafka_2.10:+'
 
     compile "org.apache.flink:flink-streaming-java_2.11:${versions.flink}"
+    compile "org.apache.flink:flink-connector-twitter_2.11:${versions.flink}"
     compile "org.apache.flink:flink-connector-kafka_2.11:1.8.0"
     compile "org.apache.flink:flink-jdbc:1.6.4"
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
