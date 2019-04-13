@@ -74,14 +74,13 @@ public class twitterConnect {
 
         final Response response = service.execute(request);
         String json = response.getBody();
-        System.out.println(json);
 
         JSONObject obj = new JSONObject(json);
 
         JSONArray arr = obj.getJSONArray("statuses");
 
 
-        File file = main.getFileFromResources("tweets.txt");
+        File file = main.getFileFromResources("tweets.json");
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
@@ -89,7 +88,6 @@ public class twitterConnect {
             String status = arr.getJSONObject(i).toString();
             writer.append(status);
             writer.append("\n");
-            System.out.println(status);
         }
 
         writer.close();
