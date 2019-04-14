@@ -33,6 +33,22 @@ storing geolocalization data, and more things that could help AI and data mining
 The easiest way is to run the AppFile.java class. You can uncomment the output via console line to see how the ingested tweets are
 tagged.
 
+# Extra
+
+Dr.Julio Castro's data has been de-duplicated. In order to download it, follow this link: https://drive.google.com/open?id=1tbuw0KfmNMxuwLTmRISec7k9pghIU-9e
+
+To minimize runtime and increase stability, shingling, minihashing, and jaccard similarities were used (See Pradeep Prabakar's blog in the helpful links section)
+
+A realtime python 2.7 server for inference is provided as well. By default, it is started on localhost:30303. However, you can pass arguments to change the port. To run it, run
+
+python server.py
+
+To test it you can run the following command:
+
+curl -X POST -d '{"text":"juan luis necesita medicinas en el tachira"}' http://localhost:30303
+
+It will return a json with a response indicating whether or not the message is already in the corpus.
+
 # License
 CoreNLP is distributed under GPL so we are obliged to do so as well. If you don't use any of the CoreNLP then you can consider the
 rest of the code MIT licensed (unless we have missed any other restrictions on dependant libraries). 
@@ -42,7 +58,9 @@ rest of the code MIT licensed (unless we have missed any other restrictions on d
 - Manuel Salgado
 - Marcos Grillo
 - Karina Celis
+- Juan Lopez Marcano
 
 # Helpful Links
 - http://data.cervantesvirtual.com/blog/2017/07/17/libreria-corenlp-de-stanford-de-procesamiento-lenguage-natural-reconocimiento-entidades/
 - https://stanfordnlp.github.io/CoreNLP/api.html
+- https://pradeepprabakar.wordpress.com/2012/05/30/near-duplicate-detection-in-streaming-twitter-data/
