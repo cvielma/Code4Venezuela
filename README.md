@@ -37,9 +37,9 @@ tagged.
 
 Dr.Julio Castro's data has been de-duplicated. In order to download it, follow this link: https://drive.google.com/open?id=1tbuw0KfmNMxuwLTmRISec7k9pghIU-9e
 
-To minimize runtime and increase stability, shingling, minihashing, and jaccard similarities were used (See Pradeep Prabakar's blog in the helpful links section)
+The python notebook provided in this repo removes duplicates from Dr. Castro's data.
 
-A realtime python 2.7 server for inference is provided as well. By default, it is started on localhost:30303. However, you can pass arguments to change the port. To run it, run
+The python server provided in this repo is for real time classification of new tweets, existing tweets, and near-duplicates (This is to address tweets that are just retweets of other tweets and other cases). By default, the server is started on localhost:30303. However, you can pass arguments to change the port. To run it, run
 
 python server.py
 
@@ -48,6 +48,10 @@ To test it you can run the following command:
 curl -X POST -d '{"text":"juan luis necesita medicinas en el tachira"}' http://localhost:30303
 
 It will return a json with a response indicating whether or not the message is already in the corpus.
+
+Is the near-duplicate thing actually working? clone the repo, and run this command and see what comes out!:
+
+curl -X POST -d '{"text":"RT @juan RT @AgenciaCN: #3Feb #ServicioPúblico Se solicitan donantes de sangre ORH+ https://t.co/eE8twKWIut #ACN https://t.co/zK5nhyydUJ"}' http://localhost:30303
 
 # License
 CoreNLP is distributed under GPL so we are obliged to do so as well. If you don't use any of the CoreNLP then you can consider the
