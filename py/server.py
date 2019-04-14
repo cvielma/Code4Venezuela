@@ -3,7 +3,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 import urlparse, json
 from BaseHTTPServer import HTTPServer
 import argparse
-
+import copy
 import json
 import pickle
 import socket
@@ -67,6 +67,33 @@ class RequestHandler(BaseHTTPRequestHandler):
             # print '\Average shingles per doc: %.2f' % (totalShingles / numDocs)
 
         return shinglesInDoc
+
+    def Jaccard_order2(self, y1):
+    
+        for i in range(0,len(y1)-1):
+            for j in range(i+1, len(y1)):
+                y1_temp = list(copy.deepcopy(y1))
+                del y1_temp[j]
+                del y1_temp[i]
+                if tuple(y1_temp) in self.db:
+                    return True
+        return False
+
+    def Jaccard_order1(self, y1):
+        
+        for i in range(0,len(y1)):
+            y1_temp = list(copy.deepcopy(y1))
+            del y1_temp[i]
+            if tuple(y1_temp) in self.db:
+                return True
+        return False
+
+    def is_near_duplicate(self, y1):
+
+        first_order = self.Jaccard_order1(y1)
+        second_order= self.Jaccard_order2(y1)
+
+        return first_order or second_order
     
     def real_time_inference(self, text):
         """
@@ -80,9 +107,15 @@ class RequestHandler(BaseHTTPRequestHandler):
         shingles = tuple(self.shingle_text(text))
         response = {}
         if( shingles not in self.db):
-            # New tweet!
-            self.db[shingles] = text
-            response = self.format_message("0","New tweet")
+            # New? Or very similar to something we already have? Let's see!
+            near_duplicate = self.is_near_duplicate(shingles)
+
+            if near_duplicate:
+                response = self.format_message("1","Near duplicate")
+            else:
+                # New tweet!
+                self.db[shingles] = text
+                response = self.format_message("0","New tweet")
         else:
             response = self.format_message("1","Existent tweet")
         
