@@ -1,16 +1,16 @@
 package dto;
 
-import nlp.ServicioPublicoNerTag;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Map;
+import java.io.Serializable;
 import java.util.Objects;
-import java.util.Set;
 
-public class TweetDto {
-    String originalTweet;
-    String tweetText;
-    TagsDto tags;
+public class TweetDto implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private String originalTweet;
+    private String tweetText;
+    private TagsDto tags;
 
     public TweetDto() {
     }

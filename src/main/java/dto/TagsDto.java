@@ -2,12 +2,15 @@ package dto;
 
 import nlp.ServicioPublicoNerTag;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public class TagsDto {
-    Map<ServicioPublicoNerTag, Set<String>> tags;
+public class TagsDto implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private Map<ServicioPublicoNerTag, Set<String>> tags;
 
     public TagsDto(Map<ServicioPublicoNerTag, Set<String>> tags) {
         this.tags = tags;

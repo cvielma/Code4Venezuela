@@ -7,6 +7,7 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
+import kafka.KafkaConstants;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -52,7 +53,7 @@ public class TwitterConnectUtil {
         for (int i = 0; i < arr.length(); i++) {
             String status = arr.getJSONObject(i).toString();
             System.out.println(status);
-            producer.send(new ProducerRecord<>("source-topic", Long.valueOf(i), status));
+            producer.send(new ProducerRecord<>(KafkaConstants.INPUT_TOPIC, Long.valueOf(i), status));
         }
     }
 

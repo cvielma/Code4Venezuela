@@ -51,8 +51,7 @@ dependencies {
     compile "org.apache.flink:flink-jdbc:1.6.4"
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
-    runtime "postgresql:postgresql:9.0-801.jdbc4"
-
+    compile "org.mongodb:mongo-java-driver:3.4.1"
     compile "commons-logging:commons-logging:1.2"
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
 

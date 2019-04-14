@@ -23,14 +23,22 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
 
-  db:
-    image: "postgres:11"
+  mongo:
+    image: mongo
     ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
+      - "27017:27017"
     environment:
-      - POSTGRES_USER=flink
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: default
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "9000:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
 
   zookeeper:
     image: wurstmeister/zookeeper

@@ -6,16 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import dto.TagsDto;
 import dto.TweetDto;
+import kafka.KafkaConstants;
 import nlp.ServicioPublicoTagger;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.api.java.io.jdbc.JDBCOutputFormat;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
-import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
-
-import java.sql.Types;
 
 public class Pipeline {
 
@@ -26,7 +23,7 @@ public class Pipeline {
         DataStream<TweetDto> filteredStream = filter(streamSource)
                 .flatMap(new TaggerFlatmap(new ObjectMapper(), new ServicioPublicoTagger()));
 
-        filteredStream.print();
+//        filteredStream.print();
 
         filteredStream.map(dto -> ow.writeValueAsString(dto)).addSink(createProducer());
     }
@@ -34,7 +31,7 @@ public class Pipeline {
     private static FlinkKafkaProducer<String> createProducer() {
         return new FlinkKafkaProducer<>(
                 "127.0.0.1:9092",
-                "sink-topic",
+                KafkaConstants.OUTPUT_TOPIC,
                 new SimpleStringSchema());
     }
 
@@ -57,10 +54,12 @@ public class Pipeline {
         @Override
         public void flatMap(String value, Collector<TweetDto> out) throws Exception {
             if(jsonParser == null) {
+                System.out.println("Creating jsonParser");
                 jsonParser = new ObjectMapper();
             }
 
             if (tagger == null) {
+                System.out.println("Creating tagger");
                 tagger = new ServicioPublicoTagger();
             }
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);

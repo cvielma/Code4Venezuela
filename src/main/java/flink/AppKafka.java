@@ -1,5 +1,6 @@
 package flink;
 
+import kafka.KafkaConstants;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -25,7 +26,7 @@ public class AppKafka {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "streamapp");
 
         DataStream<String> streamSource = env
-                .addSource(new FlinkKafkaConsumer<>("source-topic", new SimpleStringSchema(), properties));
+                .addSource(new FlinkKafkaConsumer<>(KafkaConstants.INPUT_TOPIC, new SimpleStringSchema(), properties));
 
         Pipeline.process(streamSource);
 
