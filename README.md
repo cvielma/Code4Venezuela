@@ -33,9 +33,36 @@ storing geolocalization data, and more things that could help AI and data mining
 1. docker-compose up (needed to have local Kafka running) .
 2. Start AppKafka.java (just run the class which has a main method).
 3. Once AppKafka is started, run TwitterConnectUtil (once again run main method) to feed the stream.
+4. Run KafkaToMongoCosumer.java. This will save it to MongoDB
+5. You can check the data being written to Mongo by going to localhost:9000 and accessing de admin database, processedTweets colleciton.
 
 You can uncomment the output via console line to see how the ingested tweets are
 tagged.
+
+# Sample output
+You can check in src/main/resources/mongodb_export/processedTweets a sample of the processed data. 
+
+It has 3 fields: originalTweet, tweetText, and tags. Tags contains all the fields that were identified by the NLP model.
+
+# Sample MongoDB queries
+
+Get all tweets reporting someone is sick or has a disease/condition:
+
+```
+db.getCollection('processedTweets').find({"tags.tags.SICK": {$exists: true}})
+```
+
+Get all tweets reporting someone is requiring medicines:
+
+```
+db.getCollection('processedTweets').find({"tags.tags.NEEDS": {$exists: true}})
+```
+
+Get all tweets reporting someone requires or offers a specific medicine (memantina):
+
+```
+db.getCollection('processedTweets').find({"tags.tags.MED": {$exists: true, $in:['Memantina']}})
+```
 
 # Extra
 
