@@ -8,7 +8,7 @@ This code has different parts:
 - Twitter data extraction 
 - Stream Processing (via Flink)
 - NLP processing (using CoreNLP)
-- Storage to database (PostgreSQL)
+- Storage to database (MongoDB)
 
 We provide 2 ways to get data from Twitter pending approval for Premium API access. 
 One is in a polling way using current free apis, and the other via the Flink connector. Since the main solution is based on Flink, 
@@ -34,7 +34,7 @@ storing geolocalization data, and more things that could help AI and data mining
 2. Start AppKafka.java (just run the class which has a main method).
 3. Once AppKafka is started, run TwitterConnectUtil (once again run main method) to feed the stream.
 4. Run KafkaToMongoCosumer.java. This will save it to MongoDB
-5. You can check the data being written to Mongo by going to localhost:9000 and accessing de admin database, processedTweets colleciton.
+5. You can check the data being written to Mongo by going to localhost:9000 and accessing the admin database, processedTweets colleciton.
 
 You can uncomment the output via console line to see how the ingested tweets are
 tagged.
